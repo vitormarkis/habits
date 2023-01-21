@@ -4,6 +4,7 @@ import X from "../../node_modules/phosphor-react/src/icons/X"
 
 import Logo from "../assets/logo.svg"
 import NewHabitForm from "./NewHabitForm"
+import Text from "./Text"
 
 function Header() {
   return (
@@ -16,7 +17,7 @@ function Header() {
           className="font-bold p-3 rounded-2xl border border-violet-600 flex items-center gap-3 hover:border-violet-300"
         >
           <Plus className="text-violet-600" weight="bold" />
-          Adicionar novo hábito
+          <Text color="white" size="medium" weight="semibold">Adicionar novo hábito</Text>
         </Dialog.Trigger>
 
         <Dialog.Portal>
@@ -25,8 +26,10 @@ function Header() {
             <Dialog.Close className="absolute top-6 right-6 text-zinc-400">
               <X size={24} aria-label="Fechar" />
             </Dialog.Close>
-            <Dialog.Title className="text-3xl leading-tight font-extrabold">
-              Criar hábito
+            <Dialog.Title>
+              <Text color="white" size="big" weight="extrabold">
+                Criar hábito
+              </Text>
             </Dialog.Title>
 
             <NewHabitForm />

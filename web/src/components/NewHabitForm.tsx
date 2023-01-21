@@ -2,6 +2,7 @@ import * as Checkbox from "@radix-ui/react-checkbox"
 import { FormEvent, useState } from "react"
 import Check from "../../node_modules/phosphor-react/src/icons/Check"
 import { api } from "../libs/axios"
+import Text from "./Text"
 
 const availableWeekDays = [
   "Domingo",
@@ -32,7 +33,6 @@ function NewHabitForm() {
     await api.post("habits", newHabitObject)
     setName("")
     setWeekDays([])
-
   }
 
   const toggleWeekDay = (index: number) => {
@@ -47,7 +47,9 @@ function NewHabitForm() {
   return (
     <form onSubmit={createNewHabit} className="w-full flex flex-col mt-6">
       <label htmlFor="title" className="font-semibold leading-tight">
-        Qual seu comprometimento?
+        <Text weight="semibold" size="medium">
+          Criar hábito
+        </Text>
       </label>
 
       <input
@@ -61,7 +63,9 @@ function NewHabitForm() {
       />
 
       <label htmlFor="" className="font-semibold leading-tight mt-4">
-        Qual a recorrência?
+        <Text weight="semibold" size="medium">
+          Qual a recorrência?
+        </Text>
       </label>
 
       {availableWeekDays.map((weekDay, index) => (

@@ -1,15 +1,17 @@
-import dayjs from "dayjs"
 import { useEffect, useState } from "react"
 import { api } from "../libs/axios"
 import { generateDatesFromYearBeginning } from "../utils/generate-dates-from-year-beginning"
-import { HabitDay, HabitDayPlaceholder } from "./HabitDay"
+import ColoredSummaryDays from "./ColoredSummaryDays"
+import { SummaryDaysContainer } from "./SummaryDaysContainer"
+import { UncoloredSummaryDays } from "./UncoloredSummaryDays"
+import { WeekDaysIndicator } from "./WeekDaysIndicator"
 
 const weekDays = ["D", "S", "T", "Q", "Q", "S", "S"]
 const summaryDates = generateDatesFromYearBeginning()
 const minimumSummaryDatesSize = 18 * 7 // 18 weeks
 const amountOfDaysToFill = minimumSummaryDatesSize - summaryDates.length
 
-type Summary = {
+export type SummaryProps = {
   id: string
   date: string
   amount: string
@@ -17,51 +19,26 @@ type Summary = {
 }
 
 function SummaryTable() {
-  const [summary, setSummary] = useState<Summary[]>([])
+  const [summaryAPIData, setSummaryAPIData] = useState<SummaryProps[]>([])
 
   useEffect(() => {
-    api.get("summary").then((response) => {
-      setSummary(response.data)
-    })
+    api.get("summary")
+    .then((response) => setSummaryAPIData(response.data) )
   }, [])
 
   return (
     <div className="flex w-full">
-      {/* Dia da semana! */}
-      <div className="grid grid-rows-7 grid-flow-row gap-3">
-        {weekDays.map((weekDay, idx) => (
-          <div
-            key={`${weekDay}-${idx}`}
-            className="text-zinc-400 text-xl font-bold h-10 w-10 flex items-center justify-center"
-          >
-            {weekDay}
-          </div>
-        ))}
-      </div>
+      <WeekDaysIndicator letters={weekDays} />
 
-      {/* Summary days coloridos! */}
-      <div className="grid grid-rows-7 grid-flow-col gap-3 text-white">
-        {summaryDates.map((date) => {
-          const dayInSummary = summary.find(day => (
-            dayjs(date).isSame(day.date, 'day')
-          ))
-          
-          return (
-            <HabitDay
-              key={date.toString()}
-              date={date}
-              amount={dayInSummary?.amount}
-              completed={dayInSummary?.completed}
-            />
-          )
-        })}
-
-        {/* Summary days SEM COR! */}
-        {amountOfDaysToFill > 0 &&
-          Array.from({ length: amountOfDaysToFill }).map((_, i) => (
-            <HabitDayPlaceholder key={i} />
-          ))}
-      </div>
+      {summaryAPIData.length > 0 && (
+        <SummaryDaysContainer>
+          <ColoredSummaryDays
+            summary_api_data={summaryAPIData}
+            summary_dates={summaryDates}
+          />
+          <UncoloredSummaryDays amount={amountOfDaysToFill} />
+        </SummaryDaysContainer>
+      )}
     </div>
   )
 }
