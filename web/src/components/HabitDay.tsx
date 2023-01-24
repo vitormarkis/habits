@@ -3,6 +3,7 @@ import clsx from "clsx"
 import dayjs from "dayjs"
 import { useContext, useState } from "react"
 import { AmountContext } from "../App"
+import { useAmount } from "../contexts/amount"
 import { HabitsDayList } from "./HabitsDayList"
 import ProgressBar from "./ProgressBar"
 import Text from "./Text"
@@ -16,7 +17,9 @@ interface HabitDayProps {
 
 export function HabitDay({ completed = 0, amount = 0, date }: HabitDayProps) {
   const [completedRate, setCompletedRate] = useState<number>(completed)
-  const { amountRate, setAmountRate } = useContext(AmountContext)
+  const { amount: amountRate, setAmount: setAmountRate } = useAmount()
+  console.log(useAmount())
+  // const { amountRate, setAmountRate } = useContext(AmountContext)
 
   function handleCompletedHabits(
     updated_completed: number,
