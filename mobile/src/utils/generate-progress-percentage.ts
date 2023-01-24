@@ -1,6 +1,6 @@
 export default function generateProgressPercentage(
-  amount: number,
-  completed: number
+    amount: number | string,
+    completed: number | string
 ) {
-  return Math.round((completed / amount) * 100);
+    return Math.round((Number(completed) / Number(amount)) * 100)
 }

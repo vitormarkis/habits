@@ -31,10 +31,6 @@ export function HabitsDayList({ date, onCheckHabit }: HabitDayListProps) {
       .then((response) => setHabitList(response.data))
   }, [])
 
-  useEffect(() => {
-    console.log(habitList)
-  }, [habitList])
-
   async function handleToggleHabit(habit_id: string) {
     await api.patch(`/habits/${habit_id}/toggle`)
 

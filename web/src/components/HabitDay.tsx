@@ -1,10 +1,12 @@
 import * as Popover from "@radix-ui/react-popover"
 import clsx from "clsx"
 import dayjs from "dayjs"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { AmountContext } from "../App"
 import { HabitsDayList } from "./HabitsDayList"
 import ProgressBar from "./ProgressBar"
 import Text from "./Text"
+
 
 interface HabitDayProps {
   date: Date
@@ -14,21 +16,21 @@ interface HabitDayProps {
 
 export function HabitDay({ completed = 0, amount = 0, date }: HabitDayProps) {
   const [completedRate, setCompletedRate] = useState<number>(completed)
-  const [amountRate, setAmountRate] = useState<number>(amount)
+  const { amountRate, setAmountRate } = useContext(AmountContext)
 
-  function handleCompletedHabits(updated_completed: number, updated_amount:number) {
+  function handleCompletedHabits(
+    updated_completed: number,
+    updated_amount: number
+  ) {
     setCompletedRate(updated_completed)
     setAmountRate(updated_amount)
   }
-  
+
   const new_completed_value =
     amount > 0 ? Math.round((completedRate / amountRate) * 100) : 0
 
   const dayAndMonth = dayjs(date).format("DD/MM")
   const weekDayString = dayjs(date).format("dddd")
-
-
-  
 
   return (
     <Popover.Root>
@@ -52,16 +54,20 @@ export function HabitDay({ completed = 0, amount = 0, date }: HabitDayProps) {
 
       <Popover.Portal>
         <Popover.Content className="min-w-[320px] p-6 rounded-2xl bg-zinc-900 flex flex-col">
-          <Text color="zinc" size="medium" weight="semibold">{weekDayString}</Text>
-          <Text color="white" size="big" weight="extrabold">{dayAndMonth}</Text>
-          
+          <Text color="zinc" size="medium" weight="semibold">
+            {weekDayString}
+          </Text>
+          <Text color="white" size="big" weight="extrabold">
+            {dayAndMonth}
+          </Text>
+
           <ProgressBar progress={new_completed_value} />
           <HabitsDayList date={date} onCheckHabit={handleCompletedHabits} />
           <Popover.Arrow height={8} width={8} className="fill-zinc-900" />
-          
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
+    // </AmountContext.Provider>
   )
 }
 

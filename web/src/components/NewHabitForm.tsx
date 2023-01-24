@@ -1,6 +1,7 @@
 import * as Checkbox from "@radix-ui/react-checkbox"
-import { FormEvent, useState } from "react"
+import { FormEvent, useContext, useState } from "react"
 import Check from "../../node_modules/phosphor-react/src/icons/Check"
+import { AmountContext } from "../App"
 import { api } from "../libs/axios"
 import Text from "./Text"
 
@@ -17,6 +18,9 @@ const availableWeekDays = [
 function NewHabitForm() {
   const [name, setName] = useState("")
   const [weekDays, setWeekDays] = useState<number[]>([])
+  const { amountRate, setAmountRate } = useContext(AmountContext)
+
+  // const { amountRate, setAmountRate } = useContext(AmountContext)
 
   async function createNewHabit(event: FormEvent) {
     event.preventDefault()
@@ -33,6 +37,7 @@ function NewHabitForm() {
     await api.post("habits", newHabitObject)
     setName("")
     setWeekDays([])
+    setAmountRate(amountRate + 1)
   }
 
   const toggleWeekDay = (index: number) => {
